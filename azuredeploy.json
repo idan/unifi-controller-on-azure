@@ -55,7 +55,7 @@
                                 },
                                 {
                                     "protocol": "TCP",
-                                    "port": 8443
+                                    "port": 8843
                                 },
                                 {
                                     "protocol": "TCP",
@@ -99,7 +99,7 @@
                         },
                         {
                             "protocol": "TCP",
-                            "port": 8443
+                            "port": 8843
                         },
                         {
                             "protocol": "TCP",
