@@ -5,19 +5,19 @@
         "ContainerGroupsName": {
             "type": "String",
             "metadata": {
-            "description": "Name for the container instance and group."
+                "description": "Name for the container instance and group."
             }
         },
         "dnsNameLabel": {
             "type": "String",
             "metadata": {
-            "description": "DNS name for your container instance eg heyazureguy - will result in dnsnamelabel.location.azurecontainer.io"
+                "description": "DNS name for your container instance eg heyazureguy - will result in dnsnamelabel.location.azurecontainer.io"
             }
         },
         "StorageAccountName": {
             "type": "String",
             "metadata": {
-            "description": "Storage Account Name will be auto generated."
+                "description": "Storage Account Name will be auto generated."
             }
         }
     },
@@ -27,7 +27,7 @@
     "resources": [
         {
             "type": "Microsoft.ContainerInstance/containerGroups",
-            "apiVersion": "2019-12-01",
+            "apiVersion": "2021-10-01",
             "name": "[parameters('ContainerGroupsName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
@@ -39,15 +39,15 @@
                     {
                         "name": "[parameters('ContainerGroupsName')]",
                         "properties": {
-                            "image": "linuxserver/unifi-controller:latest",
+                            "image": "jacobalberty/unifi:latest",
                             "ports": [
                                 {
                                     "protocol": "UDP",
                                     "port": 3478
                                 },
                                 {
-                                    "protocol": "UDP",
-                                    "port": 10001
+                                    "protocol": "TCP",
+                                    "port": 6789
                                 },
                                 {
                                     "protocol": "TCP",
@@ -60,19 +60,23 @@
                                 {
                                     "protocol": "TCP",
                                     "port": 8880
+                                },
+                                {
+                                    "protocol": "UDP",
+                                    "port": 10001
                                 }
                             ],
                             "environmentVariables": [],
                             "resources": {
                                 "requests": {
-                                    "memoryInGB": 1.5,
+                                    "memoryInGB": 2,
                                     "cpu": 1
                                 }
                             },
                             "volumeMounts": [
                                 {
                                     "name": "azurefile",
-                                    "mountPath": "/config/"
+                                    "mountPath": "/unifi/"
                                 }
                             ]
                         }
@@ -86,8 +90,8 @@
                             "port": 3478
                         },
                         {
-                            "protocol": "UDP",
-                            "port": 10001
+                            "protocol": "TCP",
+                            "port": 6789
                         },
                         {
                             "protocol": "TCP",
@@ -100,6 +104,10 @@
                         {
                             "protocol": "TCP",
                             "port": 8880
+                        },
+                        {
+                            "protocol": "UDP",
+                            "port": 10001
                         }
                     ],
                     "type": "Public",
@@ -120,7 +128,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2021-08-01",
             "name": "[parameters('StorageAccountName')]",
             "location": "[resourceGroup().location]",
             "sku": {
